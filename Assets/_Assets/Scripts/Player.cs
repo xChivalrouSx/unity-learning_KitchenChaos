@@ -4,17 +4,19 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
 
+    private bool isWailking;
+
     // Update is called once per frame
     private void Update()
     {
-        Vector2 inputVector = new Vector2(0, 0);
+        Vector3 inputVector = new Vector3(0, 0, 0);
         if (Input.GetKey(KeyCode.W))
         {
-            inputVector.y += 1;
+            inputVector.z += 1;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            inputVector.y -= 1;
+            inputVector.z -= 1;
         }
         if (Input.GetKey(KeyCode.A))
         {
@@ -26,6 +28,16 @@ public class Player : MonoBehaviour
         }
 
         inputVector = inputVector.normalized;
-        transform.position += new Vector3(inputVector.x, 0f, inputVector.y) * moveSpeed * Time.deltaTime;
+        transform.position += inputVector * moveSpeed * Time.deltaTime;
+
+        isWailking = inputVector != Vector3.zero;
+
+        float rotateSpeed = 10f;
+        transform.forward = Vector3.Slerp(transform.forward, inputVector, Time.deltaTime * rotateSpeed);
+    }
+
+    public bool IsWalking()
+    {
+        return isWailking;
     }
 }
