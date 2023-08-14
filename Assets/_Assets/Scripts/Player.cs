@@ -11,7 +11,16 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Vector3 inputVector = gameInput.GetMovementVectorNormalized();
-        transform.position += inputVector * moveSpeed * Time.deltaTime;
+
+        float moveDistance = moveSpeed * Time.deltaTime;
+        float playerRadius = 0.7f;
+        float playerHeight = 2f;
+        bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, inputVector, moveDistance);
+        if (canMove)
+        {
+            transform.position += inputVector * moveDistance;
+        }
+
         isWailking = inputVector != Vector3.zero;
         float rotateSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, inputVector, Time.deltaTime * rotateSpeed);
