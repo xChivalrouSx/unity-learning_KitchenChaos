@@ -94,7 +94,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Arrows"",
+                    ""name"": ""Arrow Keys"",
                     ""id"": ""42615233-ca29-421b-9524-110f20735f26"",
                     ""path"": ""3DVector"",
                     ""interactions"": """",
