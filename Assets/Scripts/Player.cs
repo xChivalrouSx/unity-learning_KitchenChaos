@@ -1,15 +1,43 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance { get; private set; }
+
+    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+    public class OnSelectedCounterChangedEventArgs : EventArgs
+    {
+        public ClearCounter selectedCounter;
+    }
+
+
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask counterLayerMask;
 
     private bool isWailking;
     private Vector3 lastInteractDirectory;
+    private ClearCounter selectedCounter;
 
-    // Update is called once per frame
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        gameInput.OnInteractAction += GameInput_OnInteractAction;
+    }
+
+    private void GameInput_OnInteractAction(object sender, EventArgs e)
+    {
+        if (selectedCounter != null)
+        {
+            selectedCounter.Interact();
+        }
+    }
+
     private void Update()
     {
         HandleMovement();
@@ -33,13 +61,21 @@ public class Player : MonoBehaviour
         float interactDistance = 2f;
         if (Physics.Raycast(transform.position, lastInteractDirectory, out RaycastHit raycastHit, interactDistance, counterLayerMask))
         {
-            //ClearCounter clearCounter = raycastHit.transform.GetComponent<ClearCounter>();
-            //if (clearCounter != null) { clearCounter.Interact(); }
-
             if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
             {
-                clearCounter.Interact();
+                if (clearCounter != selectedCounter)
+                {
+                    SetSelectedCounter(clearCounter);
+                }
             }
+            else
+            {
+                SetSelectedCounter(null);
+            }
+        }
+        else
+        {
+            SetSelectedCounter(null);
         }
     }
 
@@ -78,6 +114,12 @@ public class Player : MonoBehaviour
         isWailking = movementDirectory != Vector3.zero;
         float rotateSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, movementDirectory, Time.deltaTime * rotateSpeed);
+    }
+
+    private void SetSelectedCounter(ClearCounter selectedCounter)
+    {
+        this.selectedCounter = selectedCounter;
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs { selectedCounter = selectedCounter });
     }
 
 }
