@@ -123,6 +123,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &213176239 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6860019688380659236, guid: c6be23b9d35727a44a73f4f2d91859bb,
+    type: 3}
+  m_PrefabInstance: {fileID: 8705150757555215511}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b131eb866bce59c43b06f2b9a123dc9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,8 +1060,25 @@ PrefabInstance:
     - target: {fileID: 2322424411518139913, guid: c6be23b9d35727a44a73f4f2d91859bb,
         type: 3}
       propertyPath: m_Name
-      value: ClearCounter2
+      value: ClearCounterCheese
       objectReference: {fileID: 0}
+    - target: {fileID: 6860019688380659236, guid: c6be23b9d35727a44a73f4f2d91859bb,
+        type: 3}
+      propertyPath: tomatoPrefab
+      value: 
+      objectReference: {fileID: 945744438963339518, guid: e992696b44b10a445a5f01669acd0e1e,
+        type: 3}
+    - target: {fileID: 6860019688380659236, guid: c6be23b9d35727a44a73f4f2d91859bb,
+        type: 3}
+      propertyPath: secondClearCounter
+      value: 
+      objectReference: {fileID: 213176239}
+    - target: {fileID: 6860019688380659236, guid: c6be23b9d35727a44a73f4f2d91859bb,
+        type: 3}
+      propertyPath: kitchenObjectFactory
+      value: 
+      objectReference: {fileID: 11400000, guid: 0a593bed5f230ff43987a00ceb891a9c,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1116,8 +1145,14 @@ PrefabInstance:
     - target: {fileID: 2322424411518139913, guid: c6be23b9d35727a44a73f4f2d91859bb,
         type: 3}
       propertyPath: m_Name
-      value: ClearCounter
+      value: ClearCounterTomato
       objectReference: {fileID: 0}
+    - target: {fileID: 6860019688380659236, guid: c6be23b9d35727a44a73f4f2d91859bb,
+        type: 3}
+      propertyPath: kitchenObjectFactory
+      value: 
+      objectReference: {fileID: 11400000, guid: 38a9cb0c21ab6b848a5d08a1f31dfa33,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
