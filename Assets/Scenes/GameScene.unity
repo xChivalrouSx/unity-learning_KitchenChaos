@@ -135,6 +135,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b131eb866bce59c43b06f2b9a123dc9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &300627658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 300627659}
+  m_Layer: 0
+  m_Name: KitchenObjectHoldPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &300627659
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 300627658}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.3, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 634181348}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,6 +614,7 @@ MonoBehaviour:
   counterLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  kitchenObjectHoldPoint: {fileID: 300627659}
 --- !u!4 &634181348
 Transform:
   m_ObjectHideFlags: 0
@@ -597,6 +629,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 691379342}
+  - {fileID: 300627659}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1001 &691379341
@@ -1064,6 +1097,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6860019688380659236, guid: c6be23b9d35727a44a73f4f2d91859bb,
         type: 3}
+      propertyPath: testing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6860019688380659236, guid: c6be23b9d35727a44a73f4f2d91859bb,
+        type: 3}
       propertyPath: tomatoPrefab
       value: 
       objectReference: {fileID: 945744438963339518, guid: e992696b44b10a445a5f01669acd0e1e,
@@ -1146,6 +1184,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ClearCounterTomato
+      objectReference: {fileID: 0}
+    - target: {fileID: 6860019688380659236, guid: c6be23b9d35727a44a73f4f2d91859bb,
+        type: 3}
+      propertyPath: testing
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6860019688380659236, guid: c6be23b9d35727a44a73f4f2d91859bb,
         type: 3}
