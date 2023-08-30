@@ -1,17 +1,14 @@
 using System;
 using UnityEngine;
+using static IHasProgress;
 
-public class CuttingCounter : BaseCounter
+public class CuttingCounter : BaseCounter, IHasProgress
 {
 
     public event EventHandler<OnProgressChangeEventArgs> OnProgressChanged;
-    public class OnProgressChangeEventArgs : EventArgs
-    {
-        public float progressNormalized;
-    }
     public event EventHandler OnCut;
 
-    [SerializeField] private CuttingRecipeFactory[] cuttingRecipeFactories;
+    [SerializeField] private CuttingRecpieFactory[] cuttingRecipeFactories;
 
     private int cuttingProgress;
 
@@ -24,7 +21,7 @@ public class CuttingCounter : BaseCounter
                 player.GetKitchenObject().SetKitchenObjectParent(this);
                 cuttingProgress = 0;
 
-                CuttingRecipeFactory cuttingRecipeFactory = GetCuttingRecipeFactoryWithInput(GetKitchenObject().GetKitchenObjectFactory());
+                CuttingRecpieFactory cuttingRecipeFactory = GetCuttingRecipeFactoryWithInput(GetKitchenObject().GetKitchenObjectFactory());
                 OnProgressChanged?.Invoke(this, new OnProgressChangeEventArgs
                 {
                     progressNormalized = (float)cuttingProgress / cuttingRecipeFactory.cuttingProgressMax
@@ -50,7 +47,7 @@ public class CuttingCounter : BaseCounter
                 cuttingProgress++;
                 OnCut?.Invoke(this, EventArgs.Empty);
 
-                CuttingRecipeFactory cuttingRecipeFactory = GetCuttingRecipeFactoryWithInput(GetKitchenObject().GetKitchenObjectFactory());
+                CuttingRecpieFactory cuttingRecipeFactory = GetCuttingRecipeFactoryWithInput(GetKitchenObject().GetKitchenObjectFactory());
                 OnProgressChanged?.Invoke(this, new OnProgressChangeEventArgs
                 {
                     progressNormalized = (float)cuttingProgress / cuttingRecipeFactory.cuttingProgressMax
@@ -67,7 +64,7 @@ public class CuttingCounter : BaseCounter
 
     private KitchenObjectFactory GetOutputForInput(KitchenObjectFactory inputKitchenObjectFactory)
     {
-        CuttingRecipeFactory cuttingRecipeFactory = GetCuttingRecipeFactoryWithInput(inputKitchenObjectFactory);
+        CuttingRecpieFactory cuttingRecipeFactory = GetCuttingRecipeFactoryWithInput(inputKitchenObjectFactory);
         if (cuttingRecipeFactory != null)
         {
             return cuttingRecipeFactory.output;
@@ -75,9 +72,9 @@ public class CuttingCounter : BaseCounter
         return null;
     }
 
-    private CuttingRecipeFactory GetCuttingRecipeFactoryWithInput(KitchenObjectFactory inputKitchenObjectFactory)
+    private CuttingRecpieFactory GetCuttingRecipeFactoryWithInput(KitchenObjectFactory inputKitchenObjectFactory)
     {
-        foreach (CuttingRecipeFactory cuttingRecipeFactory in cuttingRecipeFactories)
+        foreach (CuttingRecpieFactory cuttingRecipeFactory in cuttingRecipeFactories)
         {
             if (cuttingRecipeFactory.input == inputKitchenObjectFactory)
             {
