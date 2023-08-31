@@ -22,10 +22,13 @@ public class CuttingCounter : BaseCounter, IHasProgress
                 cuttingProgress = 0;
 
                 CuttingRecpieFactory cuttingRecipeFactory = GetCuttingRecipeFactoryWithInput(GetKitchenObject().GetKitchenObjectFactory());
-                OnProgressChanged?.Invoke(this, new OnProgressChangeEventArgs
+                if (cuttingRecipeFactory != null)
                 {
-                    progressNormalized = (float)cuttingProgress / cuttingRecipeFactory.cuttingProgressMax
-                });
+                    OnProgressChanged?.Invoke(this, new OnProgressChangeEventArgs
+                    {
+                        progressNormalized = (float)cuttingProgress / cuttingRecipeFactory.cuttingProgressMax
+                    });
+                }
             }
         }
         else
