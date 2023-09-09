@@ -36,4 +36,9 @@ public class PlateKitchenObject : KitchenObject
         return true;
     }
 
+    public List<KitchenObjectFactory> GetKitchenObjectFactories()
+    {
+        return kitchenObjectFactories;
+    }
+
 }
