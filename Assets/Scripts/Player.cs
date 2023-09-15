@@ -1,9 +1,10 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IKitchenObjectParent
+public class Player : NetworkBehaviour, IKitchenObjectParent
 {
-    public static Player Instance { get; private set; }
+    //public static Player Instance { get; private set; }
 
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
     public class OnSelectedCounterChangedEventArgs : EventArgs
@@ -12,7 +13,6 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     }
 
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask counterLayerMask;
     [SerializeField] private Transform kitchenObjectHoldPoint;
 
@@ -23,13 +23,13 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void Awake()
     {
-        Instance = this;
+        //Instance = this;
     }
 
     private void Start()
     {
-        gameInput.OnInteractAction += GameInput_OnInteractAction;
-        gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
+        GameInput.Instance.OnInteractAction += GameInput_OnInteractAction;
+        GameInput.Instance.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
     }
 
     private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
@@ -63,7 +63,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void HandleInteractions()
     {
-        Vector3 movementDirectory = gameInput.GetMovementVectorNormalized();
+        Vector3 movementDirectory = GameInput.Instance.GetMovementVectorNormalized();
 
         if (movementDirectory != Vector3.zero)
         {
@@ -93,7 +93,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void HandleMovement()
     {
-        Vector3 movementDirectory = gameInput.GetMovementVectorNormalized();
+        Vector3 movementDirectory = GameInput.Instance.GetMovementVectorNormalized();
 
         float moveDistance = moveSpeed * Time.deltaTime;
         float playerRadius = 0.7f;
