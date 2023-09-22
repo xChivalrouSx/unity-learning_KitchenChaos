@@ -9,7 +9,7 @@ public class KitchenObject : NetworkBehaviour
     private IKitchenObjectParent kitchenObjectParent;
     private FollowTransform followTransform;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         followTransform = GetComponent<FollowTransform>();
     }
