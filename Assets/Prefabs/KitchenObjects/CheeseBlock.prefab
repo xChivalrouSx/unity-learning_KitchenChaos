@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 945744438963339518}
   - component: {fileID: -5784291885260814914}
-  - component: {fileID: 7131918921935628989}
-  - component: {fileID: -1628511571189728989}
   m_Layer: 0
   m_Name: CheeseBlock
   m_TagString: Untagged
@@ -49,34 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   kitchenObjectFactory: {fileID: 11400000, guid: 0a593bed5f230ff43987a00ceb891a9c,
     type: 2}
---- !u!114 &7131918921935628989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 908417914941610707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
---- !u!114 &-1628511571189728989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 908417914941610707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e43a5bc9cc45a44b8d2b4a288a47d2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &8412855524314798271
 PrefabInstance:
   m_ObjectHideFlags: 0

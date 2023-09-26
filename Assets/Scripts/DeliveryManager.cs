@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
-public class DeliveryManager : NetworkBehaviour
+public class DeliveryManager : MonoBehaviour
 {
 
     public event EventHandler OnRecipeSpawned;
@@ -14,7 +13,7 @@ public class DeliveryManager : NetworkBehaviour
     [SerializeField] private RecipeListFactory recipeListFactory;
 
     private List<RecipeFactory> waitingRecipes;
-    private float spawnRecipeTimer = 4f;
+    private float spawnRecipeTimer;
     private float spawnRecipeTimerMax = 5f;
     private int waitingRecipesMax = 4;
 
@@ -30,11 +29,6 @@ public class DeliveryManager : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsServer)
-        {
-            return;
-        }
-
         spawnRecipeTimer -= Time.deltaTime;
         if (spawnRecipeTimer <= 0f)
         {
@@ -42,17 +36,11 @@ public class DeliveryManager : NetworkBehaviour
 
             if (waitingRecipes.Count < waitingRecipesMax)
             {
-                SpawnNewWaitingRecipeClientRpc(UnityEngine.Random.Range(0, recipeListFactory.recipeFactoryList.Count));
+                RecipeFactory recipeFactory = recipeListFactory.recipeFactoryList[UnityEngine.Random.Range(0, recipeListFactory.recipeFactoryList.Count)];
+                waitingRecipes.Add(recipeFactory);
+                OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
         }
-    }
-
-    [ClientRpc]
-    private void SpawnNewWaitingRecipeClientRpc(int indexForWaitingRecipe)
-    {
-        RecipeFactory recipeFactory = recipeListFactory.recipeFactoryList[indexForWaitingRecipe];
-        waitingRecipes.Add(recipeFactory);
-        OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
     }
 
     public void DeliverRecipe(PlateKitchenObject plateKitchenObject)
@@ -82,25 +70,13 @@ public class DeliveryManager : NetworkBehaviour
                 }
                 if (plateContentsMatchesRecipe)
                 {
-                    DeliverCorrectRecipeServerRpc(i);
+                    successfulRecipesAmount++;
+                    waitingRecipes.RemoveAt(i);
+                    OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
                     return;
                 }
             }
         }
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void DeliverCorrectRecipeServerRpc(int index)
-    {
-        DeliverCorrectRecipeClientRpc(index);
-    }
-
-    [ClientRpc]
-    private void DeliverCorrectRecipeClientRpc(int index)
-    {
-        successfulRecipesAmount++;
-        waitingRecipes.RemoveAt(index);
-        OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
     }
 
     public List<RecipeFactory> GetWaitingRecipes()

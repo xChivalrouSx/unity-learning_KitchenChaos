@@ -1,12 +1,9 @@
 using System;
-using Unity.Netcode;
 using UnityEngine;
 
-public class Player : NetworkBehaviour, IKitchenObjectParent
+public class Player : MonoBehaviour, IKitchenObjectParent
 {
-    public static Player LocalInstance { get; private set; }
-
-    public static event EventHandler OnAnyPlayerSpawned;
+    public static Player Instance { get; private set; }
 
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
     public class OnSelectedCounterChangedEventArgs : EventArgs
@@ -15,6 +12,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
     }
 
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask counterLayerMask;
     [SerializeField] private Transform kitchenObjectHoldPoint;
 
@@ -23,20 +21,15 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
     private BaseCounter selectedCounter;
     private KitchenObject kitchenObject;
 
-    public override void OnNetworkSpawn()
+    private void Awake()
     {
-        if (IsOwner)
-        {
-            LocalInstance = this;
-        }
-
-        OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
+        Instance = this;
     }
 
     private void Start()
     {
-        GameInput.Instance.OnInteractAction += GameInput_OnInteractAction;
-        GameInput.Instance.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
+        gameInput.OnInteractAction += GameInput_OnInteractAction;
+        gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
     }
 
     private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
@@ -59,12 +52,8 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
 
     private void Update()
     {
-        if (IsOwner)
-        {
-            HandleMovement();
-            // HandleMovementServerAuth();
-            HandleInteractions();
-        }
+        HandleMovement();
+        HandleInteractions();
     }
 
     public bool IsWalking()
@@ -74,7 +63,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
 
     private void HandleInteractions()
     {
-        Vector3 movementDirectory = GameInput.Instance.GetMovementVectorNormalized();
+        Vector3 movementDirectory = gameInput.GetMovementVectorNormalized();
 
         if (movementDirectory != Vector3.zero)
         {
@@ -102,52 +91,9 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         }
     }
 
-    private void HandleMovementServerAuth()
-    {
-        Vector3 movementDirectory = GameInput.Instance.GetMovementVectorNormalized();
-        HandleMovementServerRpc(movementDirectory);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void HandleMovementServerRpc(Vector3 movementDirectory)
-    {
-        float moveDistance = moveSpeed * Time.deltaTime;
-        float playerRadius = 0.7f;
-        float playerHeight = 2f;
-        bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, movementDirectory, moveDistance);
-        if (!canMove)
-        {
-            Vector3 movementDirectoryX = new Vector3(movementDirectory.x, 0, 0).normalized;
-            canMove = movementDirectory.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, movementDirectoryX, moveDistance);
-
-            if (canMove)
-            {
-                movementDirectory = movementDirectoryX;
-            }
-            else
-            {
-                Vector3 movementDirectoryZ = new Vector3(0, 0, movementDirectory.z).normalized;
-                canMove = movementDirectory.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, movementDirectoryZ, moveDistance);
-                if (canMove)
-                {
-                    movementDirectory = movementDirectoryZ;
-                }
-            }
-        }
-
-        if (canMove)
-        {
-            transform.position += movementDirectory * moveDistance;
-        }
-
-        isWailking = movementDirectory != Vector3.zero;
-        float rotateSpeed = 10f;
-        transform.forward = Vector3.Slerp(transform.forward, movementDirectory, Time.deltaTime * rotateSpeed);
-    }
-
     private void HandleMovement()
     {
-        Vector3 movementDirectory = GameInput.Instance.GetMovementVectorNormalized();
+        Vector3 movementDirectory = gameInput.GetMovementVectorNormalized();
 
         float moveDistance = moveSpeed * Time.deltaTime;
         float playerRadius = 0.7f;
@@ -214,8 +160,4 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         return kitchenObject != null;
     }
 
-    public NetworkObject GetNetworkObject()
-    {
-        return NetworkObject;
-    }
 }

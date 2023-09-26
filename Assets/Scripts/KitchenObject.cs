@@ -1,18 +1,11 @@
-using Unity.Netcode;
 using UnityEngine;
 
-public class KitchenObject : NetworkBehaviour
+public class KitchenObject : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private KitchenObjectFactory kitchenObjectFactory;
 
     private IKitchenObjectParent kitchenObjectParent;
-    private FollowTransform followTransform;
-
-    protected virtual void Awake()
-    {
-        followTransform = GetComponent<FollowTransform>();
-    }
 
     public KitchenObjectFactory GetKitchenObjectFactory()
     {
@@ -21,21 +14,6 @@ public class KitchenObject : NetworkBehaviour
 
     public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent)
     {
-        SetKitchenObjectParentServerRpc(kitchenObjectParent.GetNetworkObject());
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void SetKitchenObjectParentServerRpc(NetworkObjectReference kitchenObjectParentNetworkObjectReference)
-    {
-        SetKitchenObjectParentClientRpc(kitchenObjectParentNetworkObjectReference);
-    }
-
-    [ClientRpc]
-    private void SetKitchenObjectParentClientRpc(NetworkObjectReference kitchenObjectParentNetworkObjectReference)
-    {
-        kitchenObjectParentNetworkObjectReference.TryGet(out NetworkObject kitchenObjectParentNetworkObject);
-        IKitchenObjectParent kitchenObjectParent = kitchenObjectParentNetworkObject.GetComponent<IKitchenObjectParent>();
-
         if (this.kitchenObjectParent != null)
         {
             this.kitchenObjectParent.ClearKitchenObject();
@@ -43,7 +21,8 @@ public class KitchenObject : NetworkBehaviour
         this.kitchenObjectParent = kitchenObjectParent;
         kitchenObjectParent.SetKitchenObject(this);
 
-        followTransform.SetTargetTransform(kitchenObjectParent.GetKitchenObjectFollowTransform());
+        transform.parent = kitchenObjectParent.GetKitchenObjectFollowTransform();
+        transform.localPosition = Vector3.zero;
     }
 
     public IKitchenObjectParent GetKitchenObjectParent()
@@ -68,9 +47,12 @@ public class KitchenObject : NetworkBehaviour
         return false;
     }
 
-    public static void SpawnKitchenObject(KitchenObjectFactory kitchenObjectFactory, IKitchenObjectParent kitchenObjectParent)
+    public static KitchenObject SpawnKitchenObject(KitchenObjectFactory kitchenObjectFactory, IKitchenObjectParent kitchenObjectParent)
     {
-        KitchenGameMultiplayer.Instance.SpawnKitchenObject(kitchenObjectFactory, kitchenObjectParent);
+        Transform kitchenObjectTransform = Instantiate(kitchenObjectFactory.prefab);
+        KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
+        kitchenObject.SetKitchenObjectParent(kitchenObjectParent);
+        return kitchenObject;
     }
 
 }
